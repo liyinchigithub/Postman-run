@@ -158,6 +158,16 @@ var CreateOrder=[
         "key": "flightDate",
         "value": null,
         "enabled": true
+    },
+    {
+        "key": "isCoupons",
+        "value": true,
+        "enabled": true
+    },
+    {
+        "key": "isEnterpriseAuthentication",
+        "value": true,
+        "enabled": true
     }
 ]
 module.exports=CreateOrder

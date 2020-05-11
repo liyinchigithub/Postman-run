@@ -372,14 +372,22 @@
 							"script": {
 								"id": "2a6f9996-6329-4df0-84cd-876f0cdaa989",
 								"exec": [
-									"const $ = cheerio.load(responseBody); \r",
+									"const $ = cheerio.load(responseBody);\r",
 									"\r",
-									"var flightFirst=$(\"#queryList_row1\").find('td').eq(0).text();// 获取第一个航班号信息\r",
+									"var flightFirst = $(\"#queryList_row1\").find('td').eq(0).text();// 获取第一个航班号信息\r",
 									"\r",
 									"\r",
-									"pm.environment.set(\"flightFirst\",flightFirst);// 设为环境变量\r",
+									"pm.environment.set(\"flightFirst\", flightFirst);// 设为环境变量\r",
 									"\r",
-									"console.log(flightFirst);// 调试输出"
+									"console.log(flightFirst);// 调试输出\r",
+									"\r",
+									"\r",
+									"// 流程控制\r",
+									"if(pm.environment.get(\"isCoupons\")===true){\r",
+									"postman.setNextRequest(\"费用预估（有优惠券）\");\r",
+									"}else{\r",
+									"    postman.setNextRequest(\"费用预估（无优惠券）\");\r",
+									"}"
 								],
 								"type": "text/javascript"
 							}
@@ -670,6 +678,319 @@
 					]
 				},
 				{
+					"name": "费用预估（有优惠券）",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "eb326be2-b905-4244-b7d9-2f92f67ed45c",
+								"exec": [
+									"// 预计用车时间，单位：小时（当前时间往后延长几个小时）\r",
+									"var delay = 3;\r",
+									"//  Unix时间戳\r",
+									"var departureTime = Math.round(new Date().getTime() / 1000) + delay * 3600;\r",
+									"\r",
+									"pm.environment.set(\"departureTime\", departureTime);\r",
+									"console.log(departureTime);\r",
+									"\r",
+									"// 判断是否接机或送机服务（是否接机礼宾单）\r",
+									"var serviceId = pm.environment.get(\"serviceId\")\r",
+									"if (serviceId !== 7 || serviceId !== 8) {\r",
+									"    pm.environment.set(\"isPickupVip\", false);\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b8d18f19-47b6-42f4-924f-7953e8c794f1",
+								"exec": [
+									"var json = JSON.parse(responseBody);  //获取响应body\r",
+									"var estimateId;// 预估标识\r",
+									"try {\r",
+									"    var estimateId = json.content.estimateId;\r",
+									"    pm.environment.set(\"estimateId\", estimateId);//费用标识，设置为环境变量\r",
+									"    console.log(estimateId);\r",
+									"} catch (err) {\r",
+									"    console.error(err);\r",
+									"} \r",
+									"\r",
+									"\r",
+									"// 流程控制，判断是否需要企业鉴权\r",
+									"if(pm.environment.get(\"isEnterpriseAuthentication\")===true){\r",
+									"postman.setNextRequest(\"企业鉴权\");\r",
+									"}else{\r",
+									"    postman.setNextRequest(\"创建订单\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "access_token",
+									"value": "{{accessToken}}",
+									"description": "授权后的access token",
+									"type": "text"
+								},
+								{
+									"key": "slat",
+									"value": "{{slat}}",
+									"description": "出发地纬度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								},
+								{
+									"key": "slng",
+									"value": "{{slng}}",
+									"description": "出发地经度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								},
+								{
+									"key": "elat",
+									"value": "{{elat}}",
+									"description": "目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "elng",
+									"value": "{{elng}}",
+									"description": "目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "serviceId",
+									"value": "{{serviceId}}",
+									"description": "服务类型id(7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车)",
+									"type": "text"
+								},
+								{
+									"key": "cityId",
+									"value": "{{cityId}}",
+									"description": "出发城市id（如果为空，则根据出发地经纬度定位城市）",
+									"type": "text"
+								},
+								{
+									"key": "departureTime",
+									"value": "{{departureTime}}",
+									"description": "出发时间（unix时间戳，服务类型为\"立即叫车\"或“接机”时可为空）\n时间范围：立即叫车为当前日期，预约用车/包车（8小时）/包车（4小时）为当前日期 至 当前日期+30天",
+									"type": "text"
+								},
+								{
+									"key": "flt",
+									"value": "{{flt}}",
+									"description": "航班号",
+									"type": "text"
+								},
+								{
+									"key": "flightDate",
+									"value": "{{flightDate}}",
+									"description": "航班起飞日期(unix时间戳)\n\n日期范围：当前日期-3天 至 当前日期+30天\n\n例如：当前日期为2016-3-4，则日期范围：2016-3-1（含） 至 2016-4-3（含）",
+									"type": "text"
+								},
+								{
+									"key": "flightDelayTime",
+									"value": "{{flightDelayTime}}",
+									"description": "航班到达后，延时N分钟后用车\n\n时间范围：10（含） 至 90（含）",
+									"type": "text"
+								},
+								{
+									"key": "airCode",
+									"value": "{{airCode}}",
+									"description": "接机机场三字码",
+									"type": "text"
+								},
+								{
+									"key": "isUseCoupon",
+									"value": "1",
+									"description": "是否使用代金券(1:使用 2:不使用）",
+									"type": "text"
+								},
+								{
+									"key": "passengerMobile",
+									"value": "{{passengerMobile}}",
+									"description": "乘客手机号（是否使用代金券为“1”时必填）",
+									"type": "text"
+								},
+								{
+									"key": "isPickupVip",
+									"value": "{{isPickupVip}}",
+									"description": "是否使用接机礼宾服务(服务类型为接机时有效)",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/resource/common/estimate/priceWithCoupon",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"resource",
+								"common",
+								"estimate",
+								"priceWithCoupon"
+							]
+						},
+						"description": "【功能】\n费用预估（有优惠券）\n\n【权限范围】\n基础信息(product)–客户端或授权码模式或密码模式\n\n【注意事项】\n服务类型为立即叫车(sericeId=14)时，需要调用该接口查看附近是否有车辆。附近有车辆时可以下单。如果附近没有车辆，请提示用户附近暂无空驶车辆，稍后再试。"
+					},
+					"response": [
+						{
+							"name": "费用预估（无优惠券）",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "access_token",
+											"value": "{{accessToken}}",
+											"description": "授权后的access token",
+											"type": "text"
+										},
+										{
+											"key": "slat",
+											"value": "39.090819",
+											"description": "出发地纬度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+											"type": "text"
+										},
+										{
+											"key": "slng",
+											"value": "117.218622",
+											"description": "出发地经度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+											"type": "text"
+										},
+										{
+											"key": "elat",
+											"value": "39.088827",
+											"description": "目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+											"type": "text"
+										},
+										{
+											"key": "elng",
+											"value": "117.21647",
+											"description": "目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+											"type": "text"
+										},
+										{
+											"key": "serviceId",
+											"value": "7",
+											"description": "服务类型id(7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车)",
+											"type": "text"
+										},
+										{
+											"key": "cityId",
+											"value": "2",
+											"description": "出发城市id（如果为空，则根据出发地经纬度定位城市）",
+											"type": "text"
+										},
+										{
+											"key": "departureTime",
+											"value": "1590832800",
+											"description": "出发时间（unix时间戳，服务类型为\"立即叫车\"或“接机”时可为空）\n时间范围：立即叫车为当前日期，预约用车/包车（8小时）/包车（4小时）为当前日期 至 当前日期+30天",
+											"type": "text"
+										},
+										{
+											"key": "flt",
+											"value": "",
+											"description": "航班号",
+											"type": "text"
+										},
+										{
+											"key": "flightDate",
+											"value": "",
+											"description": "航班起飞日期(unix时间戳)\n\n日期范围：当前日期-3天 至 当前日期+30天\n\n例如：当前日期为2016-3-4，则日期范围：2016-3-1（含） 至 2016-4-3（含）",
+											"type": "text"
+										},
+										{
+											"key": "flightDelayTime",
+											"value": "",
+											"description": "航班到达后，延时N分钟后用车\n\n时间范围：10（含） 至 90（含）",
+											"type": "text"
+										},
+										{
+											"key": "airCode",
+											"value": "",
+											"description": "接机机场三字码",
+											"type": "text"
+										},
+										{
+											"key": "isPickupVip",
+											"value": "",
+											"description": "是否使用接机礼宾服务(服务类型为接机时有效)",
+											"type": "text"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/resource/common/estimate/price",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"resource",
+										"common",
+										"estimate",
+										"price"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 07 May 2020 06:43:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html;charset=UTF-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1701"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "ucarId",
+									"value": "ucarmapiproxy-0acb013a-441342-8184"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"busiCode\": \"BASE000\",\n    \"code\": 1,\n    \"content\": {\n        \"distance\": 471,\n        \"duration\": 2,\n        \"estimateId\": \"9772f155e0eb47e9b3c36a77e0463f9d\",\n        \"priceStrategyFlag\": 0,\n        \"prices\": [\n            {\n                \"carGroupId\": 2,\n                \"companyDiscountAmount\": 0,\n                \"floatFactor\": 1,\n                \"initFloatFactor\": 1,\n                \"initPrice\": 20.8,\n                \"kilometrePrice\": 0,\n                \"longDistancePrice\": 0,\n                \"longDistancePriceLimit\": 20.13,\n                \"name\": \"公务车型\",\n                \"outCityPrice\": 0,\n                \"perKilometrePrice\": 0.01,\n                \"perLongDistancePrice\": 20.12,\n                \"perTimePrice\": 0.12,\n                \"pickupServiceFee\": 0,\n                \"pickupServicePrice\": 0,\n                \"possibleGenerateOutCityPrice\": 0,\n                \"price\": 20.8,\n                \"priceType\": 2,\n                \"productKilometre\": 1,\n                \"productTime\": 1,\n                \"startPrice\": 1,\n                \"timePrice\": 0.12\n            },\n            {\n                \"carGroupId\": 3,\n                \"companyDiscountAmount\": 0,\n                \"floatFactor\": 1,\n                \"initFloatFactor\": 1,\n                \"initPrice\": 50,\n                \"kilometrePrice\": 0,\n                \"longDistancePrice\": 0,\n                \"longDistancePriceLimit\": 32,\n                \"name\": \"商务7座\",\n                \"outCityPrice\": 0,\n                \"perKilometrePrice\": 12,\n                \"perLongDistancePrice\": 31,\n                \"perTimePrice\": 1.56,\n                \"pickupServiceFee\": 0,\n                \"pickupServicePrice\": 0,\n                \"possibleGenerateOutCityPrice\": 0,\n                \"price\": 50,\n                \"priceType\": 2,\n                \"productKilometre\": 1,\n                \"productTime\": 1,\n                \"startPrice\": 20,\n                \"timePrice\": 1.56\n            },\n            {\n                \"carGroupId\": 4,\n                \"companyDiscountAmount\": 0,\n                \"floatFactor\": 1,\n                \"initFloatFactor\": 1,\n                \"initPrice\": 100,\n                \"kilometrePrice\": 0,\n                \"longDistancePrice\": 0,\n                \"longDistancePriceLimit\": 10,\n                \"name\": \"豪华车型\",\n                \"outCityPrice\": 0,\n                \"perKilometrePrice\": 0,\n                \"perLongDistancePrice\": 1.5,\n                \"perTimePrice\": 2.2,\n                \"pickupServiceFee\": 0,\n                \"pickupServicePrice\": 0,\n                \"possibleGenerateOutCityPrice\": 0,\n                \"price\": 100,\n                \"priceType\": 2,\n                \"productKilometre\": 15,\n                \"productTime\": 8,\n                \"startPrice\": 12,\n                \"timePrice\": 0\n            }\n        ],\n        \"thirdWithholdRate\": 1.2\n    },\n    \"handler\": \"CLIENT\",\n    \"msg\": \"成功\",\n    \"status\": \"SUCCESS\",\n    \"uid\": \"e1a98877-3cca-4a86-8105-6ef7a1745adc\",\n    \"version\": \"001\"\n}"
+						}
+					]
+				},
+				{
 					"name": "费用预估（无优惠券）",
 					"event": [
 						{
@@ -738,15 +1059,22 @@
 							"script": {
 								"id": "49179a5b-a1ca-4c75-b119-f7dcf0f2a2c1",
 								"exec": [
-									"var json=JSON.parse(responseBody);  //获取响应body\r",
+									"var json = JSON.parse(responseBody);  //获取响应body\r",
 									"var estimateId;// 预估标识\r",
 									"try {\r",
-									"   var estimateId = json.content.estimateId;\r",
-									"    pm.environment.set(\"estimateId\",estimateId);//设置为环境变量\r",
+									"    var estimateId = json.content.estimateId;\r",
+									"    pm.environment.set(\"estimateId\", estimateId);//设置为环境变量\r",
 									"    console.log(estimateId);\r",
-									"} catch (err) { \r",
-									"console.error(err); \r",
-									"} "
+									"} catch (err) {\r",
+									"    console.error(err);\r",
+									"} \r",
+									"\r",
+									"// 流程控制，判断是否需要企业鉴权\r",
+									"if(pm.environment.get(\"isEnterpriseAuthentication\")===true){\r",
+									"postman.setNextRequest(\"企业鉴权\");\r",
+									"}else{\r",
+									"    postman.setNextRequest(\"创建订单\");\r",
+									"}"
 								],
 								"type": "text/javascript"
 							}
@@ -1000,6 +1328,18 @@
 				},
 				{
 					"name": "企业鉴权",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b0f6acef-f781-49a7-bf2c-63c3334f7331",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],

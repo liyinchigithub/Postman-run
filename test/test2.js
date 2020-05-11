@@ -1,6 +1,51 @@
 const newman = require('newman');
 var Sandbox = require('postman-sandbox'), context;
-var CreateOrder=require("../environment/CreateOrder");//引入环境变量对象
+var CreateOrder = require("../environment/CreateOrder");//引入环境变量对象
+var accessToken = process.argv[2];
+var departureTimeDelay = process.argv[3];
+var serviceId = process.argv[4];
+var carGroupId = process.argv[5];
+var cityId = process.argv[6];
+var passengerMobile = process.argv[7];
+var airCode = process.argv[8];
+var isCoupons = process.argv[9];// 是否优惠券
+var isEnterpriseAuthentication = process.argv[10];// 鉴权类型
+
+// 接收参数写入环境变量配置文件 environment\CreateOrder.js
+for (let index = 0; index < CreateOrder.length; index++) {
+    switch (CreateOrder[index].key) {
+        case "accessToken":
+            CreateOrder[index].value = accessToken;
+            break;
+        case "departureTimeDelay":
+            CreateOrder[index].value = departureTimeDelay;
+            break;
+        case "carGroupId":
+            CreateOrder[index].value = carGroupId;
+            break;
+        case "serviceId":
+            CreateOrder[index].value = serviceId;
+            break;
+        case "cityId":
+            CreateOrder[index].value = cityId;
+            break;
+        case "passengerMobile":
+            CreateOrder[index].value = passengerMobile;
+            break;
+        case "airCode":
+            CreateOrder[index].value = airCode;
+            break;
+        case "isCoupons":
+            CreateOrder[index].value = isCoupons;
+            break;
+        case "isEnterpriseAuthentication":
+            CreateOrder[index].value = isEnterpriseAuthentication;
+            break;
+        default:
+            break;
+    }
+}
+
 
 
 newman.run({
@@ -26,7 +71,7 @@ newman.run({
     insecure: false,// 禁用SSL验证检查，并允许自签名SSL证书。类型：boolean，默认值：false
     bail: false,// 一个开关，用于指定在遇到第一个错误时是否优雅地停止集合运行（在完成当前测试脚本之后）。采用其他修饰符作为参数，以指定是否以无效的名称或路径错误结束运行。 类型：boolean|object，默认值：false
     suppressExitCode: false,// 如果存在，则允许覆盖当前收集运行中的默认退出代码，这对于绕过收集结果失败很有用。不带参数。 类型：boolean，默认值：false
-    reporters: ['html',"htmlextra","junit"],//   指定一个报告人名称作为string或提供一个以上报告人名称作为array。类型：string|array 。Available reporters: cli, json, junit, progress and emojitrain.
+    reporters: ['html', "htmlextra", "junit"],//   指定一个报告人名称作为string或提供一个以上报告人名称作为array。类型：string|array 。Available reporters: cli, json, junit, progress and emojitrain.
     reporter: {
         html: {
             export: './report/htmlResults.html',  //单色 html 报告
@@ -56,16 +101,18 @@ newman.run({
 
 
 }, function (err) {
-    if (err) { throw err; }
-    console.log(' Code run Postman collection run complete!');
+    if (err) {
+        console.error('error', err);
+    }
 }).on('start', function (err, args) { // on start of run, log to console
     console.log('running a collection...');
 }).on('done', function (err, summary) {
     if (err || summary.error) {
         console.error('collection run encountered an error.');
+        console.log('创建订单失败，原因：', summary.run.failures);
     }
     else {
-        console.log('Newman run event collection run completed!');
-        console.log('创建订单失败，原因：',summary.run.failures);
+        console.log('Pewman Newman run  collection run completed!');
+
     }
 });
