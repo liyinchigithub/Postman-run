@@ -1,0 +1,1507 @@
+{
+	"info": {
+		"_postman_id": "ae9aa615-fc26-489e-90fc-3e91ca9b1530",
+		"name": "OpenAPICreateData",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "创建订单（无优惠券、旧价格体系）",
+			"item": [
+				{
+					"name": "城市列表",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "access_token",
+									"value": "{{accessToken}}",
+									"description": "授权后的access token",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "start",
+									"description": "start:上车城市列表\nend:下车城市列表",
+									"type": "text"
+								},
+								{
+									"key": "serviceId",
+									"value": "{{serviceId}}",
+									"description": "服务类型id（上车城市列表时该参数必填）",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/resource/common/getCityList",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"resource",
+								"common",
+								"getCityList"
+							]
+						},
+						"description": "【功能】\n城市列表\n\n【权限范围】\n基础信息(product)–客户端或授权码模式或密码模式\n"
+					},
+					"response": []
+				},
+				{
+					"name": "产品信息",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "access_token",
+									"value": "{{accessToken}}",
+									"description": "授权后的access token",
+									"type": "text"
+								},
+								{
+									"key": "slat",
+									"value": "39.71755",
+									"description": "出发地纬度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								},
+								{
+									"key": "slng",
+									"value": "117.30983",
+									"description": "出发地经度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								},
+								{
+									"key": "serviceId",
+									"value": "12",
+									"description": "服务id(从产品总类接口中获取)",
+									"type": "text"
+								},
+								{
+									"key": "cityId",
+									"value": "2",
+									"description": "城市id(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/resource/common/getCityServiceDetail",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"resource",
+								"common",
+								"getCityServiceDetail"
+							]
+						},
+						"description": "【功能】\n产品信息（根据产品类型，比如服务id来获取产品具体信息）\n\n【权限范围】\n基础信息(product)–客户端或授权码模式或密码模式\n\n【文档地址】\nhttp://developer.10101111.com/resourceCenter/doc?r=api/content#产品信息\n\n【注意事项】\n计价方式分时租和套餐。套餐包括一定免费时长和距离，如果超出会收取相应时长费和里程费\n响应数据说明中，标红的字段，会在新报价体系适用的接口中去除"
+					},
+					"response": []
+				},
+				{
+					"name": "航班信息查询",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b825b21a-8361-4d3d-8366-bc5590c38693",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"flightWay\": \"Oneway\",\r\n\t\"classType\": \"ALL\",\r\n\t\"hasChild\": false,\r\n\t\"hasBaby\": false,\r\n\t\"searchIndex\": 1,\r\n\t\"airportParams\": [{\r\n\t\t\"dcity\": \"xmn\",\r\n\t\t\"acity\": \"tsn\",\r\n\t\t\"dcityname\": \"厦门\",\r\n\t\t\"acityname\": \"天津\",\r\n\t\t\"date\": \"2020-05-11\",\r\n\t\t\"dcityid\": 25,\r\n\t\t\"acityid\": 3\r\n\t}],\r\n\t\"selectedInfos\": null,\r\n\t\"army\": false,\r\n\t\"token\": \"\"\r\n}",
+							"options": {
+								"formdata": {},
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://flights.ctrip.com/itinerary/api/12808/products",
+							"protocol": "https",
+							"host": [
+								"flights",
+								"ctrip",
+								"com"
+							],
+							"path": [
+								"itinerary",
+								"api",
+								"12808",
+								"products"
+							]
+						},
+						"description": "【功能】\n携程查询航班信息\nhttps://flights.ctrip.com/itinerary/oneway/xmn-tsn?date=2020-05-10\n"
+					},
+					"response": []
+				},
+				{
+					"name": "专车后台登录",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "loginId",
+									"value": "Xuser",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "GKootqPzr5rb3d%2BQPRh%2BpWtpBOQSa2peE7OmH9O9YMb8MiFwrFSPRsOwNxMC1fG4%2BWRYO7/%2BPqxR9t8UIXr%2BbZdiIlHKzzwCN0Re9hoRzugwiVkL0szkLvoOWBiBJTboZwIQGgk0YFUBnFZj5pCFvwFqxjuoQVRzNq71En1W3qI=",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "http://adminpre.10101111.com/ucaradmin/system/login.login",
+							"protocol": "http",
+							"host": [
+								"adminpre",
+								"10101111",
+								"com"
+							],
+							"path": [
+								"ucaradmin",
+								"system",
+								"login.login"
+							]
+						},
+						"description": "【功能】\n专车后台登录"
+					},
+					"response": [
+						{
+							"name": "成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/action/order/create?serviceId=<integer>&carGroupId=<integer>&cityId=<integer>&endCityId=<integer>&passengerPhone=<string>&passengerName=<string>&passengerCountryCode=<string>&slat=<double>&slng=<double>&startName=<string>&startAddress=<string>&elat=<double>&elng=<double>&endName=<string>&endAddress=<string>&departureTime=<long>&flt=<string>&flightDate=<long>&flightDelayTime=<integer>&airCode=<string>&isPickupVip=<boolean>&companyId=<long>&isSendMessage=<integer>&isPassengerSms=<integer>&isCallSms=<integer>&driverMessage=<string>&passengerMobile=<string>&isIncludeUPlus=<integer>&estimateId=<string>&customData=<string>&passengerMaskMobile=<string>&isPassengerVirtualMobile=<boolean>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"action",
+										"order",
+										"create"
+									],
+									"query": [
+										{
+											"key": "serviceId",
+											"value": "<integer>"
+										},
+										{
+											"key": "carGroupId",
+											"value": "<integer>"
+										},
+										{
+											"key": "cityId",
+											"value": "<integer>"
+										},
+										{
+											"key": "endCityId",
+											"value": "<integer>"
+										},
+										{
+											"key": "passengerPhone",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerName",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerCountryCode",
+											"value": "<string>"
+										},
+										{
+											"key": "slat",
+											"value": "<double>"
+										},
+										{
+											"key": "slng",
+											"value": "<double>"
+										},
+										{
+											"key": "startName",
+											"value": "<string>"
+										},
+										{
+											"key": "startAddress",
+											"value": "<string>"
+										},
+										{
+											"key": "elat",
+											"value": "<double>"
+										},
+										{
+											"key": "elng",
+											"value": "<double>"
+										},
+										{
+											"key": "endName",
+											"value": "<string>"
+										},
+										{
+											"key": "endAddress",
+											"value": "<string>"
+										},
+										{
+											"key": "departureTime",
+											"value": "<long>"
+										},
+										{
+											"key": "flt",
+											"value": "<string>"
+										},
+										{
+											"key": "flightDate",
+											"value": "<long>"
+										},
+										{
+											"key": "flightDelayTime",
+											"value": "<integer>"
+										},
+										{
+											"key": "airCode",
+											"value": "<string>"
+										},
+										{
+											"key": "isPickupVip",
+											"value": "<boolean>"
+										},
+										{
+											"key": "companyId",
+											"value": "<long>"
+										},
+										{
+											"key": "isSendMessage",
+											"value": "<integer>"
+										},
+										{
+											"key": "isPassengerSms",
+											"value": "<integer>"
+										},
+										{
+											"key": "isCallSms",
+											"value": "<integer>"
+										},
+										{
+											"key": "driverMessage",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerMobile",
+											"value": "<string>"
+										},
+										{
+											"key": "isIncludeUPlus",
+											"value": "<integer>"
+										},
+										{
+											"key": "estimateId",
+											"value": "<string>"
+										},
+										{
+											"key": "customData",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerMaskMobile",
+											"value": "<string>"
+										},
+										{
+											"key": "isPassengerVirtualMobile",
+											"value": "<boolean>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "专车后台-航班查询历史查询",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a6f9996-6329-4df0-84cd-876f0cdaa989",
+								"exec": [
+									"const $ = cheerio.load(responseBody); \r",
+									"\r",
+									"var flightFirst=$(\"#queryList_row1\").find('td').eq(0).text();// 获取第一个航班号信息\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"flightFirst\",flightFirst);// 设为环境变量\r",
+									"\r",
+									"console.log(flightFirst);// 调试输出"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2326966a-47ed-4245-bd5d-24d7a9894456",
+								"exec": [
+									"// 航班号\r",
+									"var flt=\"SC8053\";\r",
+									"// 接机机场三字码\r",
+									"var airCode =\"TSN\";\r",
+									"// 服务类型ID 7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车\r",
+									"var serviceId=7;\r",
+									"// 车主ID\r",
+									"var carGroupId=3;\r",
+									"// 城市ID 天津:2\r",
+									"var cityId=2;\r",
+									"// 出发地纬度（服务类型为“接机”时可为空）\r",
+									"var slat=39.090819;\r",
+									"// 出发地经度（服务类型为“接机”时可为空）\r",
+									"var slng=117.218622;\r",
+									"// 出发地名称（服务类型为“接机”时可为空）\r",
+									"var startName=\"天津博物馆\";\r",
+									"// 出发地详细地址（服务类型为“接机”时可为空）\r",
+									"var startAddress=\"平江道62号\";\r",
+									"// 目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）\r",
+									"var elat=39.088827;\r",
+									"// 目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）\r",
+									"var elng=117.21647;\r",
+									"// 目的地名称（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）\r",
+									"var endName=\"城市大厦\";\r",
+									"// 目的地详细地址（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）\r",
+									"var endAddress=\"天津市河西区友谊路35号\";\r",
+									"//获取当日时间\r",
+									"var today =new Date();\r",
+									"today=today.getFullYear()+\"-\"+(today.getMonth()+1)+\"-\"+(today.getDate()+1);\r",
+									"\r",
+									"\r",
+									"\r",
+									"//设置为环境变量\r",
+									"pm.environment.set(\"flt\",flt );\r",
+									"pm.environment.set(\"airCode\",airCode );\r",
+									"pm.environment.set(\"serviceId\",serviceId );\r",
+									"pm.environment.set(\"carGroupId\",carGroupId );\r",
+									"pm.environment.set(\"cityId\",cityId );\r",
+									"pm.environment.set(\"slat\",slat );\r",
+									"pm.environment.set(\"slng\",slng );\r",
+									"pm.environment.set(\"startName\",startName );\r",
+									"pm.environment.set(\"startAddress\",startAddress );\r",
+									"pm.environment.set(\"elat\", elat);\r",
+									"pm.environment.set(\"elng\", elng);\r",
+									"pm.environment.set(\"endName\",endName );\r",
+									"pm.environment.set(\"endAddress\",endAddress );\r",
+									"pm.environment.set(\"today\", today);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "ariCode",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "flightStartDate",
+									"value": "{{today}}",
+									"type": "text"
+								},
+								{
+									"key": "flightEndDate",
+									"value": "{{today}}",
+									"type": "text"
+								},
+								{
+									"key": "createStartDate",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "createEndDate",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "initFlag",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "maxRows",
+									"value": "20",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "http://agentpre.10101111.com/ucaragent/flight/query/doSearch.do_",
+							"protocol": "http",
+							"host": [
+								"agentpre",
+								"10101111",
+								"com"
+							],
+							"path": [
+								"ucaragent",
+								"flight",
+								"query",
+								"doSearch.do_"
+							]
+						},
+						"description": "【功能】\n专车后台-航班查询历史查询"
+					},
+					"response": [
+						{
+							"name": "成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/action/order/create?serviceId=<integer>&carGroupId=<integer>&cityId=<integer>&endCityId=<integer>&passengerPhone=<string>&passengerName=<string>&passengerCountryCode=<string>&slat=<double>&slng=<double>&startName=<string>&startAddress=<string>&elat=<double>&elng=<double>&endName=<string>&endAddress=<string>&departureTime=<long>&flt=<string>&flightDate=<long>&flightDelayTime=<integer>&airCode=<string>&isPickupVip=<boolean>&companyId=<long>&isSendMessage=<integer>&isPassengerSms=<integer>&isCallSms=<integer>&driverMessage=<string>&passengerMobile=<string>&isIncludeUPlus=<integer>&estimateId=<string>&customData=<string>&passengerMaskMobile=<string>&isPassengerVirtualMobile=<boolean>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"action",
+										"order",
+										"create"
+									],
+									"query": [
+										{
+											"key": "serviceId",
+											"value": "<integer>"
+										},
+										{
+											"key": "carGroupId",
+											"value": "<integer>"
+										},
+										{
+											"key": "cityId",
+											"value": "<integer>"
+										},
+										{
+											"key": "endCityId",
+											"value": "<integer>"
+										},
+										{
+											"key": "passengerPhone",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerName",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerCountryCode",
+											"value": "<string>"
+										},
+										{
+											"key": "slat",
+											"value": "<double>"
+										},
+										{
+											"key": "slng",
+											"value": "<double>"
+										},
+										{
+											"key": "startName",
+											"value": "<string>"
+										},
+										{
+											"key": "startAddress",
+											"value": "<string>"
+										},
+										{
+											"key": "elat",
+											"value": "<double>"
+										},
+										{
+											"key": "elng",
+											"value": "<double>"
+										},
+										{
+											"key": "endName",
+											"value": "<string>"
+										},
+										{
+											"key": "endAddress",
+											"value": "<string>"
+										},
+										{
+											"key": "departureTime",
+											"value": "<long>"
+										},
+										{
+											"key": "flt",
+											"value": "<string>"
+										},
+										{
+											"key": "flightDate",
+											"value": "<long>"
+										},
+										{
+											"key": "flightDelayTime",
+											"value": "<integer>"
+										},
+										{
+											"key": "airCode",
+											"value": "<string>"
+										},
+										{
+											"key": "isPickupVip",
+											"value": "<boolean>"
+										},
+										{
+											"key": "companyId",
+											"value": "<long>"
+										},
+										{
+											"key": "isSendMessage",
+											"value": "<integer>"
+										},
+										{
+											"key": "isPassengerSms",
+											"value": "<integer>"
+										},
+										{
+											"key": "isCallSms",
+											"value": "<integer>"
+										},
+										{
+											"key": "driverMessage",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerMobile",
+											"value": "<string>"
+										},
+										{
+											"key": "isIncludeUPlus",
+											"value": "<integer>"
+										},
+										{
+											"key": "estimateId",
+											"value": "<string>"
+										},
+										{
+											"key": "customData",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerMaskMobile",
+											"value": "<string>"
+										},
+										{
+											"key": "isPassengerVirtualMobile",
+											"value": "<boolean>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "费用预估（无优惠券）",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c38e7f5e-a2b5-4f64-a1e5-26f763d0eb1a",
+								"exec": [
+									"// 预计用车时间，单位：小时（当前时间往后延长几个小时）\r",
+									"var delay = 9;\r",
+									"//  Unix时间戳\r",
+									"var departureTime = Math.round(new Date().getTime() / 1000) + delay * 3600;\r",
+									"\r",
+									"pm.environment.set(\"departureTime\", departureTime);\r",
+									"console.log(\"departureTime\", departureTime);\r",
+									"\r",
+									"// 判断cityId是否为空\r",
+									"var cityId = pm.environment.get(\"cityId\");\r",
+									"if (cityId === \"\") {\r",
+									"  pm.environment.set(\"slat\", 39.090819);\r",
+									"  pm.environment.set(\"slng\", 117.21647);\r",
+									"} else {\r",
+									"  pm.environment.set(\"slat\", 39.090819);\r",
+									"  pm.environment.set(\"slng\", 117.21647);\r",
+									"}\r",
+									"\r",
+									"// 判断serviceId是否为包车\r",
+									"var serviceId = Number(pm.environment.get(\"serviceId\"));\r",
+									"if (serviceId === 11 || serviceId === 12) {\r",
+									"  pm.environment.set(\"elat\", \"\");// 目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）\r",
+									"  pm.environment.set(\"elng\", \"\");\r",
+									"  pm.environment.set(\"endName\", \"\");\r",
+									"  pm.environment.set(\"endAddress\", \"\");\r",
+									"  pm.environment.set(\"departureTime\", departureTime);\r",
+									"} else {\r",
+									"  pm.environment.set(\"elat\", 39.088827);// （服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）\r",
+									"  pm.environment.set(\"elng\", 117.21647);\r",
+									"  pm.environment.set(\"endName\", \"城市大厦\");\r",
+									"  pm.environment.set(\"endAddress\", \"天津市河西区友谊路35号\");\r",
+									"  pm.environment.set(\"flt\", \"SC8053\");\r",
+									"  pm.environment.set(\"flightDate\", departureTime);\r",
+									"  pm.environment.set(\"flightDelayTime\", 90);\r",
+									"}\r",
+									"\r",
+									"// 判断是否接机或送机服务\r",
+									"var serviceId = Number(pm.environment.get(\"serviceId\"))\r",
+									"console.log(\"serviceId\", serviceId);\r",
+									"if (serviceId === 7) {\r",
+									"  console.log(\"isPickupVip\", pm.environment.get(\"isPickupVip\"));\r",
+									"  pm.environment.set(\"isPickupVip\", true);\r",
+									"} else {\r",
+									"  console.log(\"isPickupVip\", pm.environment.get(\"isPickupVip\"));\r",
+									"  pm.environment.set(\"isPickupVip\", false);\r",
+									"  pm.environment.set(\"flt\");\r",
+									"  pm.environment.set(\"flightDelayTime\");\r",
+									"  pm.environment.set(\"flightDate\");\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "49179a5b-a1ca-4c75-b119-f7dcf0f2a2c1",
+								"exec": [
+									"var json=JSON.parse(responseBody);  //获取响应body\r",
+									"var estimateId;// 预估标识\r",
+									"try {\r",
+									"   var estimateId = json.content.estimateId;\r",
+									"    pm.environment.set(\"estimateId\",estimateId);//设置为环境变量\r",
+									"    console.log(estimateId);\r",
+									"} catch (err) { \r",
+									"console.error(err); \r",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "access_token",
+									"value": "{{accessToken}}",
+									"description": "授权后的access token",
+									"type": "text"
+								},
+								{
+									"key": "slat",
+									"value": "{{slat}}",
+									"description": "出发地纬度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								},
+								{
+									"key": "slng",
+									"value": "{{slng}}",
+									"description": "出发地经度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+									"type": "text"
+								},
+								{
+									"key": "elat",
+									"value": "{{elat}}",
+									"description": "目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "elng",
+									"value": "{{elng}}",
+									"description": "目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "serviceId",
+									"value": "{{serviceId}}",
+									"description": "服务类型id(7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车)",
+									"type": "text"
+								},
+								{
+									"key": "cityId",
+									"value": "{{cityId}}",
+									"description": "出发城市id（如果为空，则根据出发地经纬度定位城市）",
+									"type": "text"
+								},
+								{
+									"key": "departureTime",
+									"value": "{{departureTime}}",
+									"description": "出发时间（unix时间戳，服务类型为\"立即叫车\"或“接机”时可为空）\n时间范围：立即叫车为当前日期，预约用车/包车（8小时）/包车（4小时）为当前日期 至 当前日期+30天",
+									"type": "text"
+								},
+								{
+									"key": "flt",
+									"value": "{{flt}}",
+									"description": "航班号",
+									"type": "text"
+								},
+								{
+									"key": "flightDate",
+									"value": "{{flightDate}}",
+									"description": "航班起飞日期(unix时间戳) 日期范围：当前日期-3天 至 当前日期+30天 例如：当前日期为2016-3-4，则日期范围：2016-3-1（含） 至 2016-4-3（含）",
+									"type": "text"
+								},
+								{
+									"key": "flightDelayTime",
+									"value": "{{flightDelayTime}}",
+									"description": "航班到达后，延时N分钟后用车 时间范围：10（含） 至 90（含）",
+									"type": "text"
+								},
+								{
+									"key": "airCode",
+									"value": "{{airCode}}",
+									"description": "接机机场三字码",
+									"type": "text"
+								},
+								{
+									"key": "isPickupVip",
+									"value": "{{isPickupVip}}",
+									"description": "是否使用接机礼宾服务(服务类型为接机时有效)",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/resource/common/estimate/price",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"resource",
+								"common",
+								"estimate",
+								"price"
+							]
+						},
+						"description": "【功能】\n费用预估（无优惠券）\n\n【权限范围】\n基础信息(product)–客户端或授权码模式或密码模式\n\n【文档地址】\nhttp://developer.10101111.com/resourceCenter/doc?r=api/content#产品信息\n\n【注意事项】\n服务类型为立即叫车(sericeId=14)时，需要调用该接口查看附近是否有车辆。附近有车辆时可以下单。如果附近没有车辆，请提示用户附近暂无空驶车辆，稍后再试。"
+					},
+					"response": [
+						{
+							"name": "费用预估（无优惠券）",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "access_token",
+											"value": "{{accessToken}}",
+											"description": "授权后的access token",
+											"type": "text"
+										},
+										{
+											"key": "slat",
+											"value": "39.090819",
+											"description": "出发地纬度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+											"type": "text"
+										},
+										{
+											"key": "slng",
+											"value": "117.218622",
+											"description": "出发地经度(cityId和出发地经纬度有一个必填，且cityId优先级高)",
+											"type": "text"
+										},
+										{
+											"key": "elat",
+											"value": "39.088827",
+											"description": "目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+											"type": "text"
+										},
+										{
+											"key": "elng",
+											"value": "117.21647",
+											"description": "目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+											"type": "text"
+										},
+										{
+											"key": "serviceId",
+											"value": "7",
+											"description": "服务类型id(7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车)",
+											"type": "text"
+										},
+										{
+											"key": "cityId",
+											"value": "2",
+											"description": "出发城市id（如果为空，则根据出发地经纬度定位城市）",
+											"type": "text"
+										},
+										{
+											"key": "departureTime",
+											"value": "1590832800",
+											"description": "出发时间（unix时间戳，服务类型为\"立即叫车\"或“接机”时可为空）\n时间范围：立即叫车为当前日期，预约用车/包车（8小时）/包车（4小时）为当前日期 至 当前日期+30天",
+											"type": "text"
+										},
+										{
+											"key": "flt",
+											"value": "",
+											"description": "航班号",
+											"type": "text"
+										},
+										{
+											"key": "flightDate",
+											"value": "",
+											"description": "航班起飞日期(unix时间戳)\n\n日期范围：当前日期-3天 至 当前日期+30天\n\n例如：当前日期为2016-3-4，则日期范围：2016-3-1（含） 至 2016-4-3（含）",
+											"type": "text"
+										},
+										{
+											"key": "flightDelayTime",
+											"value": "",
+											"description": "航班到达后，延时N分钟后用车\n\n时间范围：10（含） 至 90（含）",
+											"type": "text"
+										},
+										{
+											"key": "airCode",
+											"value": "",
+											"description": "接机机场三字码",
+											"type": "text"
+										},
+										{
+											"key": "isPickupVip",
+											"value": "",
+											"description": "是否使用接机礼宾服务(服务类型为接机时有效)",
+											"type": "text"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/resource/common/estimate/price",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"resource",
+										"common",
+										"estimate",
+										"price"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "openresty"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 07 May 2020 06:43:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html;charset=UTF-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1701"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "ucarId",
+									"value": "ucarmapiproxy-0acb013a-441342-8184"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"busiCode\": \"BASE000\",\n    \"code\": 1,\n    \"content\": {\n        \"distance\": 471,\n        \"duration\": 2,\n        \"estimateId\": \"9772f155e0eb47e9b3c36a77e0463f9d\",\n        \"priceStrategyFlag\": 0,\n        \"prices\": [\n            {\n                \"carGroupId\": 2,\n                \"companyDiscountAmount\": 0,\n                \"floatFactor\": 1,\n                \"initFloatFactor\": 1,\n                \"initPrice\": 20.8,\n                \"kilometrePrice\": 0,\n                \"longDistancePrice\": 0,\n                \"longDistancePriceLimit\": 20.13,\n                \"name\": \"公务车型\",\n                \"outCityPrice\": 0,\n                \"perKilometrePrice\": 0.01,\n                \"perLongDistancePrice\": 20.12,\n                \"perTimePrice\": 0.12,\n                \"pickupServiceFee\": 0,\n                \"pickupServicePrice\": 0,\n                \"possibleGenerateOutCityPrice\": 0,\n                \"price\": 20.8,\n                \"priceType\": 2,\n                \"productKilometre\": 1,\n                \"productTime\": 1,\n                \"startPrice\": 1,\n                \"timePrice\": 0.12\n            },\n            {\n                \"carGroupId\": 3,\n                \"companyDiscountAmount\": 0,\n                \"floatFactor\": 1,\n                \"initFloatFactor\": 1,\n                \"initPrice\": 50,\n                \"kilometrePrice\": 0,\n                \"longDistancePrice\": 0,\n                \"longDistancePriceLimit\": 32,\n                \"name\": \"商务7座\",\n                \"outCityPrice\": 0,\n                \"perKilometrePrice\": 12,\n                \"perLongDistancePrice\": 31,\n                \"perTimePrice\": 1.56,\n                \"pickupServiceFee\": 0,\n                \"pickupServicePrice\": 0,\n                \"possibleGenerateOutCityPrice\": 0,\n                \"price\": 50,\n                \"priceType\": 2,\n                \"productKilometre\": 1,\n                \"productTime\": 1,\n                \"startPrice\": 20,\n                \"timePrice\": 1.56\n            },\n            {\n                \"carGroupId\": 4,\n                \"companyDiscountAmount\": 0,\n                \"floatFactor\": 1,\n                \"initFloatFactor\": 1,\n                \"initPrice\": 100,\n                \"kilometrePrice\": 0,\n                \"longDistancePrice\": 0,\n                \"longDistancePriceLimit\": 10,\n                \"name\": \"豪华车型\",\n                \"outCityPrice\": 0,\n                \"perKilometrePrice\": 0,\n                \"perLongDistancePrice\": 1.5,\n                \"perTimePrice\": 2.2,\n                \"pickupServiceFee\": 0,\n                \"pickupServicePrice\": 0,\n                \"possibleGenerateOutCityPrice\": 0,\n                \"price\": 100,\n                \"priceType\": 2,\n                \"productKilometre\": 15,\n                \"productTime\": 8,\n                \"startPrice\": 12,\n                \"timePrice\": 0\n            }\n        ],\n        \"thirdWithholdRate\": 1.2\n    },\n    \"handler\": \"CLIENT\",\n    \"msg\": \"成功\",\n    \"status\": \"SUCCESS\",\n    \"uid\": \"e1a98877-3cca-4a86-8105-6ef7a1745adc\",\n    \"version\": \"001\"\n}"
+						}
+					]
+				},
+				{
+					"name": "企业鉴权",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/action/company/authenticate?access_token={{accessToken}}&companyId={{companyId}}&loginId=&password=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"action",
+								"company",
+								"authenticate"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{accessToken}}"
+								},
+								{
+									"key": "companyId",
+									"value": "{{companyId}}",
+									"description": "企业预付4421、企业后付4409、企业支付2421、员工垫付2832"
+								},
+								{
+									"key": "loginId",
+									"value": ""
+								},
+								{
+									"key": "password",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "创建订单",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3f24e437-22c9-4903-974a-84519ae8a06d",
+								"exec": [
+									"var json = JSON.parse(responseBody);  //获取响应body\r",
+									"var estimateId;// 预估标识\r",
+									" var content; // 响应内容\r",
+									"try {\r",
+									"    var content = json.content;\r",
+									"    pm.environment.set(\"content\", content);//设置为环境变量\r",
+									"    console.log(\"content\", content);\r",
+									"    // 订单ID\r",
+									"    pm.environment.set(\"orderId\", content.orderId);//设置为环境变量\r",
+									"    console.log(\"orderId\", content);\r",
+									"    // 订单号\r",
+									"    pm.environment.set(\"orderNumber\", content.orderNumber);//设置为环境变量\r",
+									"    console.log(\"orderNumber\", content);\r",
+									"    tests[`成功，订单信息：${content}`]=true;\r",
+									"} catch (err) {\r",
+									"    console.error(err);\r",
+									"    console.log(json.msg);\r",
+									"    tests[`创建失败，原因：${json.msg}`]=false;\r",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "88e0324a-10b7-48ae-9a8b-591c2c50414c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "access_token",
+									"value": "{{accessToken}}",
+									"description": "授权后的access token",
+									"type": "text"
+								},
+								{
+									"key": "serviceId",
+									"value": "{{serviceId}}",
+									"description": "服务类型id(7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车)",
+									"type": "text"
+								},
+								{
+									"key": "carGroupId",
+									"value": "{{carGroupId}}",
+									"description": "车组id",
+									"type": "text"
+								},
+								{
+									"key": "cityId",
+									"value": "{{cityId}}",
+									"description": "出发城市id（如果为空，则根据出发地经纬度定位城市）天津2",
+									"type": "text"
+								},
+								{
+									"key": "passengerMobile",
+									"value": "{{passengerMobile}}",
+									"description": "乘客手机号",
+									"type": "text"
+								},
+								{
+									"key": "passengerName",
+									"value": "{{passengerName}}",
+									"description": "乘客姓名（不超过50字符）",
+									"type": "text"
+								},
+								{
+									"key": "passengerCountryCode",
+									"value": "{{passengerCountryCode}}",
+									"description": "乘客国家代码（默认为86）",
+									"type": "text"
+								},
+								{
+									"key": "slat",
+									"value": "{{slat}}",
+									"description": "出发地纬度（服务类型为“接机”时可为空）",
+									"type": "text"
+								},
+								{
+									"key": "slng",
+									"value": "{{slng}}",
+									"description": "出发地经度（服务类型为“接机”时可为空）",
+									"type": "text"
+								},
+								{
+									"key": "startName",
+									"value": "{{startName}}",
+									"description": "出发地名称（服务类型为“接机”时可为空）",
+									"type": "text"
+								},
+								{
+									"key": "startAddress",
+									"value": "{{startAddress}}",
+									"description": "出发地详细地址（服务类型为“接机”时可为空）",
+									"type": "text"
+								},
+								{
+									"key": "elat",
+									"value": "{{elat}}",
+									"description": "目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "elng",
+									"value": "{{elng}}",
+									"description": "目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "endName",
+									"value": "{{endName}}",
+									"description": "目的地名称（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "endAddress",
+									"value": "{{endAddress}}",
+									"description": "目的地详细地址（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+									"type": "text"
+								},
+								{
+									"key": "departureTime",
+									"value": "{{departureTime}}",
+									"description": "出发时间(unix时间戳)（服务类型为\"立即叫车\"或“接机”时可为空）\n\n时间范围：立即叫车为当前日期，预约用车/包车（8小时）/包车（4小时）为当前日期 至 当前日期+30天\n\n例如：当前日期为2016-3-4 10:00，则日期范围：2016-3-4 10:00（含） 至 2016-4-3 23:59（含）",
+									"type": "text"
+								},
+								{
+									"key": "flt",
+									"value": "{{flt}}",
+									"description": "航班号",
+									"type": "text"
+								},
+								{
+									"key": "flightDate",
+									"value": "{{flightDate}}",
+									"description": "航班起飞日期(unix时间戳) 日期范围：当前日期-3天 至 当前日期+30天 例如：当前日期为2016-3-4，则日期范围：2016-3-1（含） 至 2016-4-3（含）",
+									"type": "text"
+								},
+								{
+									"key": "flightDelayTime",
+									"value": "{{flightDelayTime}}",
+									"description": "航班到达后，延迟N分钟后用车(下飞机、拿行李、走出航站楼需要时间) 时间范围：10（含） 至 90（含）",
+									"type": "text"
+								},
+								{
+									"key": "airCode",
+									"value": "{{airCode}}",
+									"description": "接机机场三字码",
+									"type": "text"
+								},
+								{
+									"key": "isPassengerSms",
+									"value": "{{isPassengerSms}}",
+									"description": "替他人叫车时短信通知乘车人，默认通知（0：不通知 1：通知）",
+									"type": "text"
+								},
+								{
+									"key": "isCallSms",
+									"value": "{{isCallSms}}",
+									"description": "是否给订车人发送短信，默认发送(0：表示不发，1：表示发)",
+									"type": "text"
+								},
+								{
+									"key": "driverMessage",
+									"value": "{{driverMessage}}",
+									"description": "给司机留言的内容，留言内容通过base64编码以后字符数不超过500个字符",
+									"type": "text"
+								},
+								{
+									"key": "isIncludeUPlus",
+									"value": "{{isIncludeUPlus}}",
+									"description": "是否包含U+平台车辆。默认包括(0：不包括，1：包括)",
+									"type": "text"
+								},
+								{
+									"key": "customData",
+									"value": "{{customData}}",
+									"description": "订单号及优惠券信息等个性化自定义字段（Json字符串）如：\n\n{“dOrderId”:“35456983384”,“dCouponId”:“5462395218”,\n“dCouponAmount”:20,“dEntProjectCode”:“1001”,“dPurposeName”:“加班”,“customfield1”:“customValue1”}\n\n其中dOrderId、dCouponId、dCouponAmount,dEntProjectCode,dPurposeName分别代表渠道订单id、渠道优惠券id、渠道优惠券金额、项目编号、用车目的若使用这几个字段则必须使用规定的key值，其他字段无限制要求",
+									"type": "text"
+								},
+								{
+									"key": "estimateId",
+									"value": "{{estimateId}}",
+									"description": "预估标识，预估费用接口返回。",
+									"type": "text"
+								},
+								{
+									"key": "isPickupVip",
+									"value": "{{isPickupVip}}",
+									"description": "是否使用接机礼宾服务(服务类型为接机时有效)",
+									"type": "text"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/action/order/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"action",
+								"order",
+								"create"
+							]
+						},
+						"description": "【功能】\n创建订单\n\n【权限范围】\n订单(order)–授权码模式或密码模式\n\n【注意事项】\n测试环境创建的订单要跑完完整的流程，至少将订单状态流转到已提交费用状态\n\n如果下企业单请先进行企业鉴权，不进行鉴权为个人用车。企业用车将扣除企业账户的余额且可以享受特殊优惠（需商务合作），企业订单不支持代金券\n\n服务类型为“接机”时，以下两组参数（航班信息和出发地信息）2选1，强烈建议使用第1组参数，如果两组参数全部填写则按照第1组参数（航班信息）为准：\n\n航班信息： flt（航班号），flightDate（航班起飞日期），flightDelayTime（航班到达后，延时N分钟后用车），airCode（接机机场三字码）。\n\n注意：使用该组参数时，飞机晚点或提前到达，接机时间也会自动做出相应调整\n\n出发地信息：slat（出发地纬度），slng（出发地经度），startName（出发地名称），startAddress（出发地详细地址），departureTime（出发时间）。\n\n除了接机、送机、预约用车类型订单，立即用车、包车订单可能无效（无司机可派单情况下）\n"
+					},
+					"response": [
+						{
+							"name": "成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/action/order/create?serviceId=<integer>&carGroupId=<integer>&cityId=<integer>&endCityId=<integer>&passengerPhone=<string>&passengerName=<string>&passengerCountryCode=<string>&slat=<double>&slng=<double>&startName=<string>&startAddress=<string>&elat=<double>&elng=<double>&endName=<string>&endAddress=<string>&departureTime=<long>&flt=<string>&flightDate=<long>&flightDelayTime=<integer>&airCode=<string>&isPickupVip=<boolean>&companyId=<long>&isSendMessage=<integer>&isPassengerSms=<integer>&isCallSms=<integer>&driverMessage=<string>&passengerMobile=<string>&isIncludeUPlus=<integer>&estimateId=<string>&customData=<string>&passengerMaskMobile=<string>&isPassengerVirtualMobile=<boolean>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"action",
+										"order",
+										"create"
+									],
+									"query": [
+										{
+											"key": "serviceId",
+											"value": "<integer>"
+										},
+										{
+											"key": "carGroupId",
+											"value": "<integer>"
+										},
+										{
+											"key": "cityId",
+											"value": "<integer>"
+										},
+										{
+											"key": "endCityId",
+											"value": "<integer>"
+										},
+										{
+											"key": "passengerPhone",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerName",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerCountryCode",
+											"value": "<string>"
+										},
+										{
+											"key": "slat",
+											"value": "<double>"
+										},
+										{
+											"key": "slng",
+											"value": "<double>"
+										},
+										{
+											"key": "startName",
+											"value": "<string>"
+										},
+										{
+											"key": "startAddress",
+											"value": "<string>"
+										},
+										{
+											"key": "elat",
+											"value": "<double>"
+										},
+										{
+											"key": "elng",
+											"value": "<double>"
+										},
+										{
+											"key": "endName",
+											"value": "<string>"
+										},
+										{
+											"key": "endAddress",
+											"value": "<string>"
+										},
+										{
+											"key": "departureTime",
+											"value": "<long>"
+										},
+										{
+											"key": "flt",
+											"value": "<string>"
+										},
+										{
+											"key": "flightDate",
+											"value": "<long>"
+										},
+										{
+											"key": "flightDelayTime",
+											"value": "<integer>"
+										},
+										{
+											"key": "airCode",
+											"value": "<string>"
+										},
+										{
+											"key": "isPickupVip",
+											"value": "<boolean>"
+										},
+										{
+											"key": "companyId",
+											"value": "<long>"
+										},
+										{
+											"key": "isSendMessage",
+											"value": "<integer>"
+										},
+										{
+											"key": "isPassengerSms",
+											"value": "<integer>"
+										},
+										{
+											"key": "isCallSms",
+											"value": "<integer>"
+										},
+										{
+											"key": "driverMessage",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerMobile",
+											"value": "<string>"
+										},
+										{
+											"key": "isIncludeUPlus",
+											"value": "<integer>"
+										},
+										{
+											"key": "estimateId",
+											"value": "<string>"
+										},
+										{
+											"key": "customData",
+											"value": "<string>"
+										},
+										{
+											"key": "passengerMaskMobile",
+											"value": "<string>"
+										},
+										{
+											"key": "isPassengerVirtualMobile",
+											"value": "<boolean>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "52de0f00-c0e2-48f5-ab08-c7b1df83b817",
+				"type": "text/javascript",
+				"exec": [
+					"// // 航班号",
+					"// var flt = \"SC8053\";",
+					"// // 接机机场三字码",
+					"// var airCode = \"TSN\";",
+					"// // 服务类型ID 7:接机 8:送机 11:包车（4小时） 12:包车（8小时） 13:预约用车 14:立即叫车",
+					"// var serviceId = 7;",
+					"// // 车组ID",
+					"// var carGroupId = 3;",
+					"// // 城市ID 天津:2",
+					"// var cityId = 2;",
+					"// // 出发地纬度（服务类型为“接机”时可为空）",
+					"// var slat = 39.090819;",
+					"// // 出发地经度（服务类型为“接机”时可为空）",
+					"// var slng = 117.218622;",
+					"// // 出发地名称（服务类型为“接机”时可为空）",
+					"// var startName = \"天津博物馆\";",
+					"// // 出发地详细地址（服务类型为“接机”时可为空）",
+					"// var startAddress = \"平江道62号\";",
+					"// // 目的地纬度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+					"// var elat = 39.088827;",
+					"// // 目的地经度（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+					"// var elng = 117.21647;",
+					"// // 目的地名称（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+					"// var endName = \"城市大厦\";",
+					"// // 目的地详细地址（服务类型为“包车（8小时）”或\"包车（4小时）\"时为空）",
+					"// var endAddress = \"天津市河西区友谊路35号\";",
+					"// //获取当日时间",
+					"// var today = new Date();",
+					"// today = today.getFullYear() + \"-\" + (today.getMonth() + 1) + \"-\" + (today.getDate() + 1);",
+					"",
+					"",
+					"",
+					"// //设置为环境变量",
+					"// pm.environment.set(\"flt\", flt);",
+					"// pm.environment.set(\"airCode\", airCode);",
+					"// pm.environment.set(\"serviceId\", serviceId);",
+					"// pm.environment.set(\"carGroupId\", carGroupId);",
+					"// pm.environment.set(\"cityId\", cityId);",
+					"// pm.environment.set(\"slat\", slat);",
+					"// pm.environment.set(\"slng\", slng);",
+					"// pm.environment.set(\"startName\", startName);",
+					"// pm.environment.set(\"startAddress\", startAddress);",
+					"// pm.environment.set(\"elat\", elat);",
+					"// pm.environment.set(\"elng\", elng);",
+					"// pm.environment.set(\"endName\", endName);",
+					"// pm.environment.set(\"endAddress\", endAddress);",
+					"// pm.environment.set(\"today\", today);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "357f3947-07a8-4a62-9d0f-ef11f5132d8d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

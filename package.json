@@ -1,0 +1,22 @@
+{
+  "name": "postman-run",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "newman"
+  ],
+  "author": "liyinchi",
+  "license": "ISC",
+  "dependencies": {
+    "mocha": "^7.1.2",
+    "newman": "^5.0.0",
+    "newman-reporter-csv": "^1.1.1",
+    "newman-reporter-html": "^1.0.5",
+    "newman-reporter-htmlextra": "^1.14.1",
+    "postman-sandbox": "^3.5.3"
+  }
+}
