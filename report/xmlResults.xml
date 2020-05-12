@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="OpenAPICreateData" tests="7" time="1.733">
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 城市列表" id="febb99cd-3a98-4d35-bbec-eef783002ff0" timestamp="2020-05-11T10:42:56.413Z" tests="0" failures="0" errors="0" time="0.284"/>
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 产品信息" id="955b2f38-24e5-437b-8741-0501741b4c35" timestamp="2020-05-11T10:42:56.413Z" tests="0" failures="0" errors="0" time="0.122"/>
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 航班信息查询" id="86f5b495-735e-4eb9-b08b-363c574c766d" timestamp="2020-05-11T10:42:56.413Z" tests="0" failures="0" errors="0" time="0.097"/>
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 专车后台登录" id="4b34633d-ffbb-41fa-8b1b-ef7742407d2d" timestamp="2020-05-11T10:42:56.413Z" tests="0" failures="0" errors="0" time="0.308"/>
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 专车后台-航班查询历史查询" id="150ced1c-fe2c-4d04-ae2a-e055ec58d3d0" timestamp="2020-05-11T10:42:56.413Z" tests="0" failures="0" errors="0" time="0.152"/>
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 费用预估（无优惠券）" id="97a82e9c-4bcb-43a3-9572-aa3aed007cef" timestamp="2020-05-11T10:42:56.413Z" tests="0" failures="0" errors="0" time="0.278"/>
-  <testsuite name="创建订单（无优惠券、旧价格体系） / 创建订单" id="d9711128-5d3f-4005-a24b-3f1c12d1b607" timestamp="2020-05-11T10:42:56.413Z" tests="1" failures="1" errors="0" time="0.492">
-    <testcase name="创建失败，原因：您所选择的乘车人有未结算订单，请更换乘车人。谢谢！" time="0.492" classname="OpenApiCreateData">
-      <failure type="AssertionFailure" message="expected false to be truthy">
-        <![CDATA[Failed 1 times.]]>
-        <![CDATA[Collection JSON ID: ae9aa615-fc26-489e-90fc-3e91ca9b1530.]]>
-        <![CDATA[Collection name: OpenAPICreateData.]]>
-        <![CDATA[Request name: 创建订单（无优惠券、旧价格体系） / 创建订单.]]>
-        <![CDATA[Test description: 创建失败，原因：您所选择的乘车人有未结算订单，请更换乘车人。谢谢！.]]>
-        <![CDATA[Error message: expected false to be truthy.]]>
-        <![CDATA[Stacktrace: AssertionError: expected false to be truthy
-   at Object.eval sandbox-script.js:1:9).]]>
-      </failure>
-    </testcase>
+<testsuites name="OpenAPICreateData" tests="7" time="2.130">
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 城市列表" id="1df040cf-d0a9-4e8c-b914-c8c4e2beaede" timestamp="2020-05-12T08:48:13.360Z" tests="0" failures="0" errors="0" time="0.286"/>
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 产品信息" id="ce1f94f3-ad48-43f4-80e2-0e49f6ff9b25" timestamp="2020-05-12T08:48:13.360Z" tests="0" failures="0" errors="0" time="0.093"/>
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 航班信息查询" id="fba1e1f8-f57a-4171-aba6-75322082292f" timestamp="2020-05-12T08:48:13.360Z" tests="0" failures="0" errors="0" time="0.108"/>
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 专车后台登录" id="643da450-256d-4125-a48d-4709eca400eb" timestamp="2020-05-12T08:48:13.360Z" tests="0" failures="0" errors="0" time="0.409"/>
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 专车后台-航班查询历史查询" id="92cfdf32-9dad-497e-b6a3-5dae17f2b7dd" timestamp="2020-05-12T08:48:13.360Z" tests="0" failures="0" errors="0" time="0.202"/>
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 费用预估（无优惠券）" id="90e8bfca-53fa-420d-b3e2-f85662f0a5fc" timestamp="2020-05-12T08:48:13.360Z" tests="1" failures="0" errors="0" time="0.336">
+    <testcase name="费用预估：成功" time="0.336" classname="OpenApiCreateData"/>
+  </testsuite>
+  <testsuite name="创建订单（无优惠券、旧价格体系） / 创建订单" id="c3c79fbe-1001-466a-8d76-317b398f2777" timestamp="2020-05-12T08:48:13.360Z" tests="1" failures="0" errors="0" time="0.696">
+    <testcase name="成功创建成功，订单信息 &#xA;    订单ID：&quot;6825876826657783811&quot;&#xA;    订单号：&quot;35133235620422&quot;&#xA;    &#xA;    " time="0.696" classname="OpenApiCreateData"/>
   </testsuite>
 </testsuites>

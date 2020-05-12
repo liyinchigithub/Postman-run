@@ -11,17 +11,7 @@ var CreateOrder=[
     },
     {
         "key": "accessToken",
-        "value": "e1a98877-3cca-4a86-8105-6ef7a1745adc",
-        "enabled": true
-    },
-    {
-        "key": "departureTime",
-        "value": 1589219520,
-        "enabled": true
-    },
-    {
-        "key": "estimateId",
-        "value": "2455dac4b278472f95af175557638520",
+        "value": "ec827246-0b23-44a0-a5e3-05c8220c312d",
         "enabled": true
     },
     {
@@ -71,7 +61,7 @@ var CreateOrder=[
     },
     {
         "key": "serviceId",
-        "value": "7",
+        "value": "11",
         "enabled": true
     },
     {
@@ -157,6 +147,11 @@ var CreateOrder=[
     {
         "key": "flightDate",
         "value": null,
+        "enabled": true
+    },
+    {
+        "key": "departureTimeDelay",
+        "value": 5,
         "enabled": true
     },
     {
